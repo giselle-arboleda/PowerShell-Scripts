@@ -1,17 +1,18 @@
 # Find computer name by barcode number
-
-do{
 # Create Excel COM object
 $Excel = New-Object -ComObject Excel.Application 
 
 
 # Open the workbook
-$Workbook = $Excel.Workbooks.Open("Path/To/YOUR/ExcelWorkbook.xlsx")    # REPLACE WITH YOUR PATH
+$Workbook = $Excel.Workbooks.Open("D:\Path\TO\YOUR\ExcelFILE.xlsx") # REPLACE WITH THE PATH TO YOUR EXCEL FILE
 
 
 # Open the worksheet and display 
 # the worksheet name
 $workSheet = $Workbook.Sheets.Item(2)
+
+# do{
+
 
 
 
@@ -54,5 +55,9 @@ do{
 
 
 # Close workbook when done
+# } until ($quit)
 $Workbook.close($false)
-} until ($quit)
+
+Write-Host "Press Enter to exit"
+Read-Host 
+
