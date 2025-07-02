@@ -1,19 +1,19 @@
 # Find computer name by barcode number
 
-
+do{
 # Create Excel COM object
 $Excel = New-Object -ComObject Excel.Application 
 
 
 # Open the workbook
-$Workbook = $Excel.Workbooks.Open("Path\To\File")  # Replace with path to Excel workbook 
+$Workbook = $Excel.Workbooks.Open("Path/To/YOUR/ExcelWorkbook.xlsx")    # REPLACE WITH YOUR PATH
 
 
 # Open the worksheet and display 
 # the worksheet name
 $workSheet = $Workbook.Sheets.Item(2)
 
-$Range = $Worksheet.Range("B2").EntireColumn
+
 
 
 
@@ -24,18 +24,22 @@ do{
     $barcode = Read-Host "Enter barcode"
 
     # Find barcode
-    $Search = $Range.find($barcode)
+    $lastRow = $workSheet.UsedRange.Rows.Count
+    $found = $false
 
-    # If barcode is found, get the value of
-    # the "D" column and display the
-    # computer name.
-    if ($Search){
-        $searchRow = $Search.row()
+    for ($i = 1; $i -le $lastRow; $i++) {
+        $cellValue = $workSheet.Cells.Item($i, 2).Value2
+        if ($cellValue -eq $barcode) {
+            $found = $true
+            $searchRow = $i
+            break
+        }
+    }
 
-        $cellValue = $workSheet.Cells.Item($SearchRow, 4).Value()
-        Write-Host "`nComputer name: $cellValue" -ForegroundColor "Cyan"
-        Write-Host "Barcode: $barcode`n" -ForegroundColor "Cyan"
-         
+    if ($found) {
+        Write-Host "`n`nBarcode found!"
+        $cellValue = $workSheet.Cells.Item($searchRow, 4).Value2
+        Write-Host "Computer name: $cellValue`n`n" -ForegroundColor "Cyan"
     }
 
     # Repeat until an existing barcode
@@ -51,3 +55,4 @@ do{
 
 # Close workbook when done
 $Workbook.close($false)
+} until ($quit)
